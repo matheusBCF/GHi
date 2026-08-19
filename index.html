@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Servos - Arduino Uno</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #101827, #1e3a5f);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: #172235;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #aebbd0;
+            margin-bottom: 25px;
+        }
+
+        .conexao {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        #statusLed {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #e74c3c;
+            box-shadow: 0 0 10px #e74c3c;
+        }
+
+        button {
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        #conectar {
+            background: #3498db;
+            color: white;
+        }
+
+        .servos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .servo {
+            background: #202f45;
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .servo h2 {
+            margin-bottom: 20px;
+        }
+
+        .indicador {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .led {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #555;
+            transition: 0.2s;
+        }
+
+        .led.aceso {
+            background: #2ecc71;
+            box-shadow: 0 0 15px #2ecc71;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #bdc8d8;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .angulo {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .controles {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .acionar {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .parar {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .rodape {
+            text-align: center;
+            color: #8997aa;
+            margin-top: 25px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 650px) {
+            .servos {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Controle de 2 Servo-Motores</h1>
+
+        <p class="subtitulo">
+            Projeto utilizando Arduino Uno
+        </p>
+
+        <div class="conexao">
+            <span id="statusLed"></span>
+            <span id="status">Arduino desconectado</span>
+            <button id="conectar">Conectar Arduino</button>
+        </div>
+
+        <div class="servos">
+
+            <!-- SERVO 1 -->
+            <div class="servo">
+
+                <h2>Servo Motor 1</h2>
+
+                <div class="indicador">
+                    <div id="led1" class="led"></div>
+                    <span>LED indicador 1</span>
+                </div>
+
+                <label for="slider1">
+                    Ângulo do servo
+                </label>
+
+                <input
+                    type="range"
+                    id="slider1"
+                    min="0"
+                    max="180"
+                    value="90"
+                >
+
+                <div class="angulo">
+                    <span id="valor1">90</span>°
+                </div>
+
+                <div class="controles">
+                    <button class="acionar" onclick="acionarServo(1)">
+                        Acionar
+                    </button>
+
+                    <button class="parar" onclick="pararServo(1)">
+                        Parar
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- SERVO 2 -->
+            <div class="servo">
+
+                <h2>Servo Motor 2</h2>
+
+                <div class="indicador">
+                    <div id="led2" class="led"></div>
+                    <span>LED indicador 2</span>
+                </div>
+
+                <label for="slider2">
+                    Ângulo do servo
+                </label>
+
+                <input
+                    type="range"
+                    id="slider2"
+                    min="0"
+                    max="180"
+                    value="90"
+                >
+
+                <div class="angulo">
+                    <span id="valor2">90</span>°
+                </div>
+
+                <div class="controles">
+                    <button class="acionar" onclick="acionarServo(2)">
+                        Acionar
+                    </button>
+
+                    <button class="parar" onclick="pararServo(2)">
+                        Parar
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="rodape">
+            Interface Web + Arduino Uno + 2 Servos + 2 LEDs
+        </div>
+
+    </div>
+
+    <script>
+        let porta = null;
+        let escritor = null;
+
+        const slider1 = document.getElementById("slider1");
+        const slider2 = document.getElementById("slider2");
+
+        const valor1 = document.getElementById("valor1");
+        const valor2 = document.getElementById("valor2");
+
+        slider1.addEventListener("input", () => {
+            valor1.textContent = slider1.value;
+        });
+
+        slider2.addEventListener("input", () => {
+            valor2.textContent = slider2.value;
+        });
+
+        // Conecta o site ao Arduino Uno pela porta serial
+        document.getElementById("conectar").addEventListener("click", async () => {
+
+            if (!("serial" in navigator)) {
+                alert(
+                    "Seu navegador não suporta Web Serial. " +
+                    "Utilize um navegador baseado em Chromium, como Google Chrome ou Microsoft Edge."
+                );
+                return;
+            }
+
+            try {
+
+                porta = await navigator.serial.requestPort();
+
+                await porta.open({
+                    baudRate: 9600
+                });
+
+                escritor = porta.writable.getWriter();
+
+                document.getElementById("status").textContent =
+                    "Arduino conectado";
+
+                document.getElementById("statusLed").style.background =
+                    "#2ecc71";
+
+                document.getElementById("statusLed").style.boxShadow =
+                    "0 0 10px #2ecc71";
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                document.getElementById("status").textContent =
+                    "Erro ao conectar";
+
+            }
+
+        });
+
+        // Envia uma mensagem para o Arduino
+        async function enviar(comando) {
+
+            if (!escritor) {
+                alert("Conecte o Arduino primeiro.");
+                return;
+            }
+
+            const dados = new TextEncoder().encode(comando + "\n");
+
+            await escritor.write(dados);
+        }
+
+        // Aciona o servo e acende o LED correspondente
+        async function acionarServo(numero) {
+
+            let angulo;
+
+            if (numero === 1) {
+                angulo = slider1.value;
+
+                document.getElementById("led1")
+                    .classList.add("aceso");
+
+            } else {
+                angulo = slider2.value;
+
+                document.getElementById("led2")
+                    .classList.add("aceso");
+            }
+
+            await enviar(`S${numero}:${angulo}`);
+        }
+
+        // Desliga o LED e informa o Arduino
+        async function pararServo(numero) {
+
+            if (numero === 1) {
+                document.getElementById("led1")
+                    .classList.remove("aceso");
+            } else {
+                document.getElementById("led2")
+                    .classList.remove("aceso");
+            }
+
+            await enviar(`P${numero}`);
+        }
+    </script>
+
+</body>
+</html>
